@@ -1,12 +1,80 @@
-   <html>
-            <head>
-                <title>Password Checker</title>
-            </head>
-            <body>
-                <h2>Insert password</h2>
-                <form action="/check" method="post">
-                    <input type="text" name="password" placeholder="Enter password">
-                    <button type="submit">Check</button>
-                </form>
-            </body>
-        </html>
+</html>
+</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Validator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        input {
+            font-size: 1.2em;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        #message {
+            color: red;
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+        #recommendation {
+            color: blue;
+            margin-top: 5px;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <label for="password">Insert password:</label>
+    <input type="password" id="password" oninput="validatePassword()">
+    <p id="message"></p>
+    <p id="recommendation"></p>
+
+    <script>
+        function validatePassword() {
+            const password = document.getElementById('password').value;
+            const message = document.getElementById('message');
+            const recommendation = document.getElementById('recommendation');
+            let issues = [];
+            
+            if (password.length < 8) {
+                issues.push("Increase the password length to at least 8 characters.");
+            }
+            
+            let count = 1;
+            for (let i = 1; i < password.length; i++) {
+                if (password[i] === password[i - 1]) {
+                    count++;
+                    if (count === 3) {
+                        issues.push("Avoid repeating the same character three times in a row.");
+                        break;
+                    }
+                } else {
+                    count = 1;
+                }
+            }
+            
+            if (!/[0-9]/.test(password)) {
+                issues.push("Include at least one number.");
+            }
+            
+            if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+                issues.push("Include at least one special character.");
+            }
+            
+            if (issues.length > 0) {
+                message.textContent = "The password is insecure";
+                recommendation.textContent = issues[Math.floor(Math.random() * issues.length)];
+            } else {
+                message.textContent = "";
+                recommendation.textContent = "";
+            }
+        }
+    </script>
+</body>
+</html>
