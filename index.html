@@ -12,10 +12,26 @@
             font-weight: bold;
             text-align: center;
         }
-        label, select, button {
+        label {
+            display: block;
+            margin-bottom: 20px;
             font-weight: bold;
-            color: blue;
+            color: black;
+            font-size: 24px;
+        }
+        select {
+            font-weight: bold;
+            color: red;
             font-size: 18px;
+        }
+        button {
+            font-weight: bold;
+            color: white;
+            background-color: black;
+            font-size: 18px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
         }
         #message {
             margin-top: 20px;
@@ -37,7 +53,7 @@
     <script>
         const messages = {
             beginner: [
-                "Start talking with other native speakers",
+                "Start talking with other native speakers for at least 30 minutes a day",
                 "Start watching your favorite films and TV series in this language",
                 "Start learning the language using different apps"
             ],
