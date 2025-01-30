@@ -1,0 +1,58 @@
+use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use regex::Regex;
+
+fn is_valid_password(password: &str) -> bool {
+    if password.len() < 8 {
+        return false;
+    }
+    if !password.chars().any(|c| c.is_digit(10)) {
+        return false;
+    }
+    let re = Regex::new(r"(.)\1{2,}").unwrap();
+    if re.is_match(password) {
+        return false;
+    }
+    true
+}
+
+async fn index() -> impl Responder {
+    let html = r#"
+        <html>
+            <head>
+                <title>Password Checker</title>
+            </head>
+            <body>
+                <h2>Insert password</h2>
+                <form action="/check" method="post">
+                    <input type="text" name="password" placeholder="Enter password">
+                    <button type="submit">Check</button>
+                </form>
+            </body>
+        </html>
+    "#;
+    HttpResponse::Ok().body(html)
+}
+
+async fn check_password(form: web::Form<std::collections::HashMap<String, String>>) -> impl Responder {
+    if let Some(password) = form.get("password") {
+        if is_valid_password(password) {
+            HttpResponse::Ok().body("Password is strong!")
+        } else {
+            HttpResponse::Ok().body("This password is not strong enough to crack")
+        }
+    } else {
+        HttpResponse::BadRequest().body("No password provided")
+    }
+}
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| {
+        App::new()
+            .route("/", web::get().to(index))
+            .route("/check", web::post().to(check_password))
+    })
+    .bind("127.0.0.1:8080")?
+    .run()
+    .await
+}
