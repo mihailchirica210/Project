@@ -2,6 +2,7 @@ Nowadays, many people want to learn a new language, like me when I moved to Germ
 
 
 
+
+```sh
 cargo build
 cargo run
-[main.rs](src/main.rs)
